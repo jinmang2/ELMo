@@ -1,4 +1,4 @@
-Pre-trained ELMo Representations for Many Languages
+Pre-trained ELMo Representations
 ===================================================
 
 ## Pre-requirements

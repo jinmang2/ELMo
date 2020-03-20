@@ -5,14 +5,12 @@ import torch
 import torch.nn as nn
 
 
-def add_begin_end_sentence_token(sents, max_chars=50):
-    dataset, textset = [], []
+def read_corpus(sents, max_chars=50):
+    dataset = []
     for sent in sents:
         # Add begin of sentence(bos)
         data = ['<bos>']
-        text = []
         for token in sent:
-            text.append(token)
             # ELMo's input is character
             # Since ElMo uses char-CNN, input_dim must be SAME
             # if numChars+2 < max_chars: why +2? bos & eos
@@ -25,8 +23,7 @@ def add_begin_end_sentence_token(sents, max_chars=50):
         # Add end of sentence(eos)
         data.append('<eos>')
         dataset.append(data)
-        textset.append(text)
-    return dataset, textset
+    return dataset
 
 
 # For the model trained with character-based word encoder.

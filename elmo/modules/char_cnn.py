@@ -12,6 +12,7 @@ from torch.autograd import Variable
 # User Defined Library
 from .highway import Highway
 
+
 class ConvTokenEmbedder(nn.Module):
     def __init__(self, config, word_emb_layer, char_emb_layer, use_cuda):
         super(ConvTokenEmbedder, self).__init__()

@@ -1,20 +1,24 @@
 import argparse
+import logging
 import sys
 
 import torch
 
 from .utils import load_config, read_dictionary
 from .sample_data.sample_sentences import sents
-from .modules.data_handling import (add_begin_end_sentence_token,
+from .modules.data_handling import (read_corpus,
                                     get_lexicon,
                                     create_batches,
                                     EmbeddingLayer)
 from .modules.char_cnn import ConvTokenEmbedder
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)-15s %(levelname)s: %(message)s')
+
+
 def main(use_cuda=False):
     print('Hello!')
     config = load_config()
-    dataset, _ = add_begin_end_sentence_token(sents)
+    dataset = read_corpus(sents)
     char_fpi = read_dictionary(is_char=True)
     word_fpi = read_dictionary(is_char=False)
     char_lexicon, char_emb_layer = get_lexicon(
