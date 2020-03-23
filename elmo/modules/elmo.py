@@ -346,32 +346,33 @@ class ElmobiLm(_EncoderBase):
             forward_cache = forward_output_sequence
             backward_cache = backward_output_sequence
 
-        if state is not None:
-            forward_hidden_state, backward_hidden_state = state[0].split(self.hidden_size, 2)
-            forward_memory_state, backward_memory_state = state[1].split(self.cell_size, 2)
-            forward_state = (forward_hidden_state, forward_memory_state)
-            backward_state = (backward_hidden_state, backward_memory_state)
-        else:
-            forward_state = None
-            backward_state = None
+            # 이 부분에서 indentation 때문에 에러가 발생했었음!!
+            if state is not None:
+                forward_hidden_state, backward_hidden_state = state[0].split(self.hidden_size, 2)
+                forward_memory_state, backward_memory_state = state[1].split(self.cell_size, 2)
+                forward_state = (forward_hidden_state, forward_memory_state)
+                backward_state = (backward_hidden_state, backward_memory_state)
+            else:
+                forward_state = None
+                backward_state = None
 
-        forward_output_sequence, forward_state = forward_layer(forward_output_sequence,
-                                                             batch_lengths,
-                                                             forward_state)
-        backward_output_sequence, backward_state = backward_layer(backward_output_sequence,
-                                                                batch_lengths,
-                                                                backward_state)
-        # Skip connections, just adding the input to the output.
-        if layer_index != 0:
-            forward_output_sequence += forward_cache
-            backward_output_sequence += backward_cache
+            forward_output_sequence, forward_state = forward_layer(forward_output_sequence,
+                                                                 batch_lengths,
+                                                                 forward_state)
+            backward_output_sequence, backward_state = backward_layer(backward_output_sequence,
+                                                                    batch_lengths,
+                                                                    backward_state)
+            # Skip connections, just adding the input to the output.
+            if layer_index != 0:
+                forward_output_sequence += forward_cache
+                backward_output_sequence += backward_cache
 
-        sequence_outputs.append(torch.cat([forward_output_sequence,
-                                           backward_output_sequence], -1))
-        # Append the state tuples in a list, so that we can return
-        # the final states for all the layers.
-        final_states.append((torch.cat([forward_state[0], backward_state[0]], -1),
-                           torch.cat([forward_state[1], backward_state[1]], -1)))
+            sequence_outputs.append(torch.cat([forward_output_sequence,
+                                               backward_output_sequence], -1))
+            # Append the state tuples in a list, so that we can return
+            # the final states for all the layers.
+            final_states.append((torch.cat([forward_state[0], backward_state[0]], -1),
+                                 torch.cat([forward_state[1], backward_state[1]], -1)))
 
         stacked_sequence_outputs: torch.FloatTensor = torch.stack(sequence_outputs)
         # Stack the hidden state and memory for each layer into 2 tensors of shape
