@@ -73,7 +73,7 @@ class _EncoderBase(nn.Module):
                 initial_states = [state.index_select(1, sorting_indices)[:, :num_valid, :]
                                   for state in hidden_state]
             else:
-                initial_stats = self._get_initial_states(batch_size, num_valid, sorting_indices)
+                initial_states = self._get_initial_states(batch_size, num_valid, sorting_indices)
         else:
             initial_states = self._get_initial_states(batch_size, num_valid, sorting_indices)
 
