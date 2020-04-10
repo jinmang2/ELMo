@@ -4,13 +4,13 @@ import sys
 
 import torch
 
-from .utils import load_config, read_dictionary
-from .sample_data.sample_sentences import sents
-from .modules.data_handling import (read_corpus,
+from utils import load_config, read_dictionary
+from sample_data.sample_sentences import sents
+from modules.data_handling import (read_corpus,
                                     get_lexicon,
                                     create_batches,
                                     EmbeddingLayer)
-from .modules.char_cnn import ConvTokenEmbedder
+from modules.char_cnn import ConvTokenEmbedder
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)-15s %(levelname)s: %(message)s')
 
