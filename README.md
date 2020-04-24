@@ -1,62 +1,17 @@
-Pre-trained ELMo Representations
-===================================================
+ELMo: Embeddings from Language Model
+======
 
-## Pre-requirements
+Feature-based pre-training Language Model
 
-* **must** python >= 3.6 (if you use python3.5, you will encounter this issue https://github.com/HIT-SCIR/ELMoForManyLangs/issues/8)
-* pytorch 0.4
-* other requirements from allennlp
-
-### Install the package
-
-~You need to install the package to use the embeddings with the following commends~
-```
-python setup.py install
-```
-
-### Use in command line
-
-```
-$ python -m elmo test \
-    --input_format conll \
-    --input /path/to/your/input \
-    --model /path/to/your/model \
-    --output_prefix /path/to/your/output \
-    --output_format hdf5 \
-    --output_layer -1
-```
-
-## Citation
-
-If our ELMo gave you nice improvements, please cite us.
-
-```
-@InProceedings{che-EtAl:2018:K18-2,
-  author    = {Che, Wanxiang  and  Liu, Yijia  and  Wang, Yuxuan  and  Zheng, Bo  and  Liu, Ting},
-  title     = {Towards Better {UD} Parsing: Deep Contextualized Word Embeddings, Ensemble, and Treebank Concatenation},
-  booktitle = {Proceedings of the {CoNLL} 2018 Shared Task: Multilingual Parsing from Raw Text to Universal Dependencies},
-  month     = {October},
-  year      = {2018},
-  address   = {Brussels, Belgium},
-  publisher = {Association for Computational Linguistics},
-  pages     = {55--64},
-  url       = {http://www.aclweb.org/anthology/K18-2005}
-}
-```
-
-Please also cite the
-[NLPL Vectors Repository](http://wiki.nlpl.eu/index.php/Vectors/home)
-for hosting the models.
-```
-@InProceedings{fares-EtAl:2017:NoDaLiDa,
-  author    = {Fares, Murhaf  and  Kutuzov, Andrey  and  Oepen, Stephan  and  Velldal, Erik},
-  title     = {Word vectors, reuse, and replicability: Towards a community repository of large-text resources},
-  booktitle = {Proceedings of the 21st Nordic Conference on Computational Linguistics},
-  month     = {May},
-  year      = {2017},
-  address   = {Gothenburg, Sweden},
-  publisher = {Association for Computational Linguistics},
-  pages     = {271--276},
-  url       = {http://www.aclweb.org/anthology/W17-0237}
-}
-```
+#### 20.04.24
+- 기존에 작업하던 `elmo`파일을 `old_`로 이전
+- 새롭게 `elmo`파일을 작성, 앞으로 작성할 내용을 기입
+    - charCNN의 논문에서 언급하는 바와 같이 unicode로 변환하여 단어를 vocab으로 만드는 코드 작성
+        - 생각해보니, `WordEmbeddingLayer`은 그냥 `EmbeddingLayer`를 상속받게 만들고
+        - `CharEmbeddingLayer`에서 dict, emb가 인자로 들어오지 않은 경우 정의할 `to_unicode` 함수로 처리하게 만들면 되지 않나? 오호?
+    - vocab의 token을 처리하는 추상화 클래스 작성
+    - pre-train과 elmo-layer 적용 부분을 모델이 달리할 수 있도록 코드 작성
+    - 목표는
+        - NLU model `ELMo`/`BERT`, NLG 모델 `GPT` 등을 내가 정확히 이해하고
+        - 최신의 `T5`, `ELECTRA`, `XlNet` 등도 파악,
+        - 자연어 처리의 다양한 task를 푸는 것!
